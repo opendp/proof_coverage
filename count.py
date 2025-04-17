@@ -21,28 +21,14 @@ sys.stdout = f
 
 
 os.chdir(OPENDP_PATH)
+repo = Repo(".")
 
 print("OpenDP Proof Statistics")
-print("Branch:", Repo(OPENDP_PATH).active_branch.name)
+print("Branch:", repo.active_branch.name)
 print("Current Date:", datetime.datetime.now().strftime("%Y-%m-%d"))
 
-
-def list_files_in_directory(directory_path):
-    if os.path.exists(os.path.join(directory_path, ".git")):
-        repo = Repo(directory_path)
-        return repo.git.ls_files().splitlines()
-    else:
-        file_list = []
-        for root, files in os.walk(directory_path):
-            for file in files:
-                file_list.append(
-                    os.path.relpath(os.path.join(root, file), directory_path)
-                )
-        return file_list
-
-file_paths = list_files_in_directory(".")
-
-nodes = []
+# Ignores .gitignored files
+file_paths = repo.git.ls_files().splitlines()
 
 
 def extract_needs_proof(lines, path):
@@ -109,6 +95,7 @@ for file_path in file_paths:
     if not file_path.endswith(".py") and not file_path.endswith(".rs"):
         continue
 
+    # ignore generated code
     if "python" in file_path and "extras" not in file_path:
         continue
 
