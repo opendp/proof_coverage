@@ -7,6 +7,8 @@ OPENDP_PATH = "../openDP"
 # 4. Run this script
 #      python3 stats.py
 
+WITH_FFI = True
+
 import os
 from git import Repo
 import re
@@ -16,7 +18,7 @@ import datetime
 
 # comment to print to stdout
 orig_stdout = sys.stdout
-f = open('output.txt', 'w')
+f = open('output-with-ffi.txt' if WITH_FFI else 'output.txt', 'w')
 sys.stdout = f
 
 
@@ -41,6 +43,7 @@ def extract_needs_proof(lines, path):
         if (
             line.startswith("pub(crate) fn ")
             or line.startswith("pub fn ")
+            or line.startswith("pub extern \"C\" fn ")
             or line.startswith("fn ")
             or line.startswith("def ")
         ):
@@ -87,10 +90,13 @@ ignore = [
     "test/", # not responsible
     "test.py", # not responsible
     "test.rs", # not responsible
-    "ffi/", # not responsible
-    "ffi.rs", # not responsible
     "build", # infrastructure
 ]
+if not WITH_FFI:
+    ignore += [
+        "ffi/", # not responsible
+        "ffi.rs", # not responsible
+    ]
 for file_path in file_paths:
     if not file_path.endswith(".py") and not file_path.endswith(".rs"):
         continue

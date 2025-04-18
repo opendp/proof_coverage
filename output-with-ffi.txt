@@ -1,0 +1,1327 @@
+OpenDP Proof Statistics
+Branch: 458-modular-noise
+Current Date: 2025-04-17
+
+Under /**
+* Needed: 936
+* Written: 69
+
+Under rust/src/traits/samplers/**
+* Needed: 25
+* Written: 10
+
+Under rust/src/measurements/**
+* Needed: 150
+* Written: 41
+
+Under rust/src/combinators/**
+* Needed: 77
+* Written: 3
+
+Under rust/src/transformations/**
+* Needed: 212
+* Written: 9
+
+../openDP
+├── python
+│   └── src
+│       └── opendp
+│           └── extras
+│               ├── numpy
+│               │   ├── __init__.py
+│               │   │   ├── def _check_nonnegative_int
+│               │   │   ├── def _check_norm_and_p
+│               │   │   ├── def _fmt_attrs
+│               │   │   ├── def _sscp_domain
+│               │   │   └── def array2_domain
+│               │   ├── _make_np_clamp
+│               │   │   └── __init__.py
+│               │   │       └── def make_np_clamp
+│               │   ├── _make_np_count
+│               │   │   └── __init__.py
+│               │   │       └── def make_np_count
+│               │   ├── _make_np_mean
+│               │   │   └── __init__.py
+│               │   │       └── def make_private_np_mean
+│               │   ├── _make_np_sscp
+│               │   │   └── __init__.py
+│               │   │       └── def make_np_sscp
+│               │   └── _make_np_sum
+│               │       └── __init__.py
+│               │           └── def make_np_sum
+│               └── sklearn
+│                   ├── _make_eigendecomposition
+│                   │   └── __init__.py
+│                   │       └── def make_private_np_eigendecomposition
+│                   ├── _make_eigenvalues
+│                   │   └── __init__.py
+│                   │       └── def make_eigenvalues
+│                   ├── _make_eigenvector
+│                   │   └── __init__.py
+│                   │       ├── def make_np_sscp_projection
+│                   │       ├── def make_private_eigenvector
+│                   │       └── def make_private_eigenvectors
+│                   └── decomposition
+│                       └── __init__.py
+│                           ├── def _make_center
+│                           ├── def _smaller
+│                           ├── def _split_pca_epsilon_evenly
+│                           └── def make_private_pca
+└── rust
+    └── src
+        ├── accuracy
+        │   ├── mod.rs
+        │   │   ├── fn accuracy_to_gaussian_scale
+        │   │   ├── fn accuracy_to_laplacian_scale
+        │   │   ├── fn gaussian_scale_to_accuracy
+        │   │   ├── fn laplacian_scale_to_accuracy
+        │   │   ├── ✅ fn accuracy_to_discrete_gaussian_scale
+        │   │   ├── ✅ fn accuracy_to_discrete_laplacian_scale
+        │   │   ├── ✅ fn discrete_gaussian_scale_to_accuracy
+        │   │   └── ✅ fn discrete_laplacian_scale_to_accuracy
+        │   ├── polars
+        │   │   ├── ffi.rs
+        │   │   │   └── fn opendp_accuracy__summarize_polars_measurement
+        │   │   └── mod.rs
+        │   │       ├── fn agg_dataframe
+        │   │       ├── fn expr_aggregate
+        │   │       ├── fn summarize_expr
+        │   │       ├── fn summarize_lazyframe
+        │   │       ├── fn summarize_logical_plan
+        │   │       └── fn summarize_polars_measurement
+        │   └── tail_bounds
+        │       ├── erfc_err_analysis.py
+        │       │   ├── def bitsToFloat
+        │       │   ├── def floatToBits
+        │       │   └── def worker
+        │       └── mod.rs
+        │           ├── fn conservative_continuous_laplacian_tail_to_alpha
+        │           ├── fn conservative_discrete_gaussian_tail_to_alpha
+        │           ├── ✅ fn conservative_continuous_gaussian_tail_to_alpha
+        │           └── ✅ fn conservative_discrete_laplacian_tail_to_alpha
+        ├── combinators
+        │   ├── amplify
+        │   │   ├── ffi.rs
+        │   │   │   ├── fn make_population_amplification
+        │   │   │   ├── fn opendp_combinators__make_population_amplification
+        │   │   │   ├── impl AmplifiableMeasure for AnyMeasure {
+        │   │   │   └── impl IsSizedDomain for AnyDomain {
+        │   │   └── mod.rs
+        │   │       ├── fn make_population_amplification
+        │   │       ├── impl AmplifiableMeasure for Approximate<MaxDivergence> {
+        │   │       ├── impl AmplifiableMeasure for MaxDivergence {
+        │   │       └── impl<D: Domain> IsSizedDomain for VectorDomain<D> {
+        │   ├── chain
+        │   │   ├── ffi.rs
+        │   │   │   ├── fn make_chain_mt
+        │   │   │   ├── fn make_chain_pm
+        │   │   │   ├── fn make_chain_tt
+        │   │   │   ├── fn opendp_combinators__make_chain_mt
+        │   │   │   ├── fn opendp_combinators__make_chain_pm
+        │   │   │   └── fn opendp_combinators__make_chain_tt
+        │   │   ├── mod.rs
+        │   │   │   ├── fn make_chain_mt
+        │   │   │   ├── fn make_chain_pm
+        │   │   │   ├── fn make_chain_tt
+        │   │   │   └── fn mismatch_error
+        │   │   └── shr
+        │   │       ├── mod.rs
+        │   │       │   ├── impl<DI, DX, DO, MI, MO, MTI, MTO> Shr<Transformation<DX, DO, MTI, MTO>>
+        │   │       │   ├── impl<DI, DX, DO, MI, MX, MO> Shr<Transformation<DX, DO, MX, MO>>
+        │   │       │   ├── impl<DI, DX, DO, MI, MX, MO> Shr<Transformation<DX, DO, MX, MO>> for Transformation<DI, DX, MI, MX>
+        │   │       │   ├── impl<DI, DX, TO, MI, MX, MO> Shr<Measurement<DX, TO, MX, MO>>
+        │   │       │   ├── impl<DI, DX, TO, MI, MX, MO> Shr<Measurement<DX, TO, MX, MO>> for Transformation<DI, DX, MI, MX>
+        │   │       │   ├── impl<DI, TX, TO, MI, MO> Shr<Function<TX, TO>> for Fallible<Measurement<DI, TX, MI, MO>>
+        │   │       │   ├── impl<DI, TX, TO, MI, MO> Shr<Function<TX, TO>> for Measurement<DI, TX, MI, MO>
+        │   │       │   └── impl<TI, TX, TO> Shr<Function<TX, TO>> for Function<TI, TX>
+        │   │       └── partials.rs
+        │   │           ├── impl<DI, DO, MI, MO> Shr<PartialTransformation<DI, DO, MI, MO>> for (DI, MI)
+        │   │           ├── impl<DI, DX, DO, MI, MO, MTI, MTO> Shr<Transformation<DX, DO, MTI, MTO>>
+        │   │           ├── impl<DI, DX, DO, MI, MX, MO> Shr<PartialTransformation<DX, DO, MX, MO>>
+        │   │           ├── impl<DI, DX, DO, MI, MX, MO> Shr<Transformation<DX, DO, MX, MO>>
+        │   │           ├── impl<DI, DX, TO, MI, MX, MO> Shr<Measurement<DX, TO, MX, MO>>
+        │   │           ├── impl<DI, DX, TO, MI, MX, MO> Shr<PartialMeasurement<DX, TO, MX, MO>>
+        │   │           ├── impl<DI, TO, MI, MO> Shr<PartialMeasurement<DI, TO, MI, MO>> for (DI, MI)
+        │   │           └── impl<DI, TX, TO, MI, MO> Shr<Function<TX, TO>> for PartialMeasurement<DI, TX, MI, MO>
+        │   ├── fix_delta
+        │   │   ├── ffi.rs
+        │   │   │   ├── fn make_fix_delta
+        │   │   │   └── fn opendp_combinators__make_fix_delta
+        │   │   └── mod.rs
+        │   │       ├── fn make_fix_delta
+        │   │       ├── impl FixDeltaMeasure for Approximate<SmoothedMaxDivergence> {
+        │   │       └── impl FixDeltaMeasure for SmoothedMaxDivergence {
+        │   ├── measure_cast
+        │   │   ├── approximate
+        │   │   │   ├── ffi.rs
+        │   │   │   │   ├── fn make_approximate
+        │   │   │   │   └── fn opendp_combinators__make_approximate
+        │   │   │   └── mod.rs
+        │   │   │       └── fn make_approximate
+        │   │   ├── fixed_approxDP_to_approxDP
+        │   │   │   ├── ffi.rs
+        │   │   │   │   ├── fn make_fixed_approxDP_to_approxDP
+        │   │   │   │   └── fn opendp_combinators__make_fixed_approxDP_to_approxDP
+        │   │   │   └── mod.rs
+        │   │   │       ├── fn fixed_approx_dp_privacy_curve
+        │   │   │       └── fn make_fixed_approxDP_to_approxDP
+        │   │   ├── pureDP_to_zCDP
+        │   │   │   ├── ffi.rs
+        │   │   │   │   ├── fn make_pureDP_to_zCDP
+        │   │   │   │   └── fn opendp_combinators__make_pureDP_to_zCDP
+        │   │   │   └── mod.rs
+        │   │   │       └── fn make_pureDP_to_zCDP
+        │   │   └── zCDP_to_approxDP
+        │   │       ├── cdp_delta
+        │   │       │   └── mod.rs
+        │   │       │       └── ✅ fn cdp_delta
+        │   │       ├── ffi.rs
+        │   │       │   ├── fn make_zCDP_to_approxDP
+        │   │       │   └── fn opendp_combinators__make_zCDP_to_approxDP
+        │   │       └── mod.rs
+        │   │           ├── fn make_zCDP_to_approxDP
+        │   │           ├── impl ConcentratedMeasure for Approximate<ZeroConcentratedDivergence> {
+        │   │           └── impl ConcentratedMeasure for ZeroConcentratedDivergence {
+        │   ├── select_private_candidate
+        │   │   ├── ffi.rs
+        │   │   │   ├── fn opendp_combinators__make_select_private_candidate
+        │   │   │   ├── fn to_f64
+        │   │   │   └── ✅ fn make_select_private_candidate
+        │   │   └── mod.rs
+        │   │       └── ✅ fn make_select_private_candidate
+        │   └── sequential_compositor
+        │       ├── interactive
+        │       │   ├── ffi.rs
+        │       │   │   ├── fn make_sequential_composition
+        │       │   │   └── fn opendp_combinators__make_sequential_composition
+        │       │   └── mod.rs
+        │       │       └── fn make_sequential_composition
+        │       └── noninteractive
+        │           ├── ffi.rs
+        │           │   ├── fn make_basic_composition
+        │           │   ├── fn opendp_combinators__make_basic_composition
+        │           │   ├── impl BasicCompositionMeasure for AnyMeasure {
+        │           │   └── impl<Q: 'static> BasicCompositionMeasure for TypedMeasure<Q> {
+        │           └── mod.rs
+        │               ├── fn make_basic_composition
+        │               ├── impl BasicCompositionMeasure for Approximate<MaxDivergence> {
+        │               ├── impl BasicCompositionMeasure for Approximate<ZeroConcentratedDivergence> {
+        │               ├── impl BasicCompositionMeasure for MaxDivergence {
+        │               ├── impl BasicCompositionMeasure for RenyiDivergence {
+        │               └── impl BasicCompositionMeasure for ZeroConcentratedDivergence {
+        ├── core
+        │   ├── ffi.rs
+        │   │   ├── fn new_function
+        │   │   ├── fn new_queryable
+        │   │   ├── fn opendp_core___error_free
+        │   │   ├── fn opendp_core___function_free
+        │   │   ├── fn opendp_core___measurement_free
+        │   │   ├── fn opendp_core___transformation_free
+        │   │   ├── fn opendp_core__function_eval
+        │   │   ├── fn opendp_core__measurement_check
+        │   │   ├── fn opendp_core__measurement_function
+        │   │   ├── fn opendp_core__measurement_input_carrier_type
+        │   │   ├── fn opendp_core__measurement_input_distance_type
+        │   │   ├── fn opendp_core__measurement_input_domain
+        │   │   ├── fn opendp_core__measurement_input_metric
+        │   │   ├── fn opendp_core__measurement_invoke
+        │   │   ├── fn opendp_core__measurement_map
+        │   │   ├── fn opendp_core__measurement_output_distance_type
+        │   │   ├── fn opendp_core__measurement_output_measure
+        │   │   ├── fn opendp_core__new_function
+        │   │   ├── fn opendp_core__new_queryable
+        │   │   ├── fn opendp_core__queryable_eval
+        │   │   ├── fn opendp_core__queryable_query_type
+        │   │   ├── fn opendp_core__transformation_check
+        │   │   ├── fn opendp_core__transformation_function
+        │   │   ├── fn opendp_core__transformation_input_carrier_type
+        │   │   ├── fn opendp_core__transformation_input_distance_type
+        │   │   ├── fn opendp_core__transformation_input_domain
+        │   │   ├── fn opendp_core__transformation_input_metric
+        │   │   ├── fn opendp_core__transformation_invoke
+        │   │   ├── fn opendp_core__transformation_map
+        │   │   ├── fn opendp_core__transformation_output_distance_type
+        │   │   ├── fn opendp_core__transformation_output_domain
+        │   │   ├── fn opendp_core__transformation_output_metric
+        │   │   ├── fn wrap_transition
+        │   │   ├── impl Drop for FfiError {
+        │   │   ├── impl FfiError {
+        │   │   ├── impl FfiSlice {
+        │   │   ├── impl From<Error> for FfiError {
+        │   │   ├── impl From<FfiError> for Error {
+        │   │   ├── impl PartialEq for FfiError {
+        │   │   ├── impl<DI: 'static + Domain, DO: 'static + Domain, MI: 'static + Metric, MO: 'static + Metric>
+        │   │   ├── impl<DI: 'static + Domain, TO: 'static, MI: 'static + Metric, MO: 'static + Measure>
+        │   │   ├── impl<T: PartialEq> PartialEq for FfiResult<*mut T> {
+        │   │   ├── impl<T> From<Error> for FfiResult<T> {
+        │   │   ├── impl<T> From<FfiResult<*mut T>> for Fallible<T> {
+        │   │   ├── impl<TI, TO: From<TI>> From<Fallible<TI>> for FfiResult<*mut TO> {
+        │   │   └── impl<TI: 'static, TO: 'static> IntoAnyFunctionFfiResultExt for Fallible<Function<TI, TO>> {
+        │   └── mod.rs
+        │       ├── impl<DI: Domain, DO: Domain, MI: Metric, MO: Metric> Transformation<DI, DO, MI, MO>
+        │       ├── impl<DI: Domain, DO: Domain, MI: Metric, MO: Metric> Transformation<DI, DO, MI, MO> {
+        │       ├── impl<DI: Domain, TO, MI: Metric, MO: Measure> Measurement<DI, TO, MI, MO>
+        │       ├── impl<DI: Domain, TO, MI: Metric, MO: Measure> Measurement<DI, TO, MI, MO> {
+        │       ├── impl<MI: 'static + Metric, MO: 'static + Measure> PrivacyMap<MI, MO> {
+        │       ├── impl<MI: 'static + Metric, MO: 'static + Metric> StabilityMap<MI, MO> {
+        │       ├── impl<MI: Metric, MO: Measure> PrivacyMap<MI, MO> {
+        │       ├── impl<MI: Metric, MO: Metric> StabilityMap<MI, MO> {
+        │       ├── impl<TI, TO> Function<TI, TO> {
+        │       └── impl<TI: 'static, TO: 'static> Function<TI, TO> {
+        ├── domains
+        │   ├── ffi.rs
+        │   │   ├── fn _atom_domain_get_bounds_closed
+        │   │   ├── fn _atom_domain_nan
+        │   │   ├── fn atom_domain
+        │   │   ├── fn opendp_domains___atom_domain_get_bounds_closed
+        │   │   ├── fn opendp_domains___atom_domain_nan
+        │   │   ├── fn opendp_domains___domain_equal
+        │   │   ├── fn opendp_domains___domain_free
+        │   │   ├── fn opendp_domains___extrinsic_domain_descriptor
+        │   │   ├── fn opendp_domains___option_domain_get_element_domain
+        │   │   ├── fn opendp_domains___vector_domain_get_element_domain
+        │   │   ├── fn opendp_domains___vector_domain_get_size
+        │   │   ├── fn opendp_domains__atom_domain
+        │   │   ├── fn opendp_domains__bitvector_domain
+        │   │   ├── fn opendp_domains__domain_carrier_type
+        │   │   ├── fn opendp_domains__domain_debug
+        │   │   ├── fn opendp_domains__domain_type
+        │   │   ├── fn opendp_domains__map_domain
+        │   │   ├── fn opendp_domains__member
+        │   │   ├── fn opendp_domains__option_domain
+        │   │   ├── fn opendp_domains__user_domain
+        │   │   ├── fn opendp_domains__vector_domain
+        │   │   ├── fn option_domain
+        │   │   ├── impl Domain for ExtrinsicDomain {
+        │   │   ├── impl Drop for ExtrinsicElement {
+        │   │   ├── impl ExtrinsicElement {
+        │   │   ├── impl PartialEq for ExtrinsicDomain {
+        │   │   ├── impl PartialEq for ExtrinsicElement {
+        │   │   └── impl std::fmt::Debug for ExtrinsicDomain {
+        │   ├── mod.rs
+        │   │   ├── impl BitVectorDomain {
+        │   │   ├── impl Domain for BitVectorDomain {
+        │   │   ├── impl<D: Domain> Domain for OptionDomain<D> {
+        │   │   ├── impl<D: Domain> Domain for VectorDomain<D> {
+        │   │   ├── impl<D: Domain> OptionDomain<D> {
+        │   │   ├── impl<D: Domain> VectorDomain<D> {
+        │   │   ├── impl<DK: Domain, DV: Domain> Domain for MapDomain<DK, DV>
+        │   │   ├── impl<DK: Domain, DV: Domain> MapDomain<DK, DV>
+        │   │   ├── impl<T: CheckAtom + ProductOrd + Debug> AtomDomain<T> {
+        │   │   ├── impl<T: CheckAtom> AtomDomain<T> {
+        │   │   ├── impl<T: CheckAtom> Domain for AtomDomain<T> {
+        │   │   ├── impl<T: Clone> Bounds<T> {
+        │   │   ├── impl<T: HasNull> NaN<T> {
+        │   │   └── impl<T: ProductOrd + Debug> Bounds<T> {
+        │   ├── polars
+        │   │   ├── array
+        │   │   │   ├── ffi.rs
+        │   │   │   │   └── fn opendp_domains__array_domain
+        │   │   │   └── mod.rs
+        │   │   │       ├── impl ArrayDomain {
+        │   │   │       ├── impl Domain for ArrayDomain {
+        │   │   │       └── impl PartialEq for ArrayDomain {
+        │   │   ├── categorical
+        │   │   │   ├── ffi.rs
+        │   │   │   │   └── fn opendp_domains__categorical_domain
+        │   │   │   └── mod.rs
+        │   │   │       ├── impl CategoricalDomain {
+        │   │   │       └── impl Domain for CategoricalDomain {
+        │   │   ├── datetime
+        │   │   │   ├── ffi.rs
+        │   │   │   │   ├── fn datetime_domain
+        │   │   │   │   └── fn opendp_domains__datetime_domain
+        │   │   │   └── mod.rs
+        │   │   │       └── impl Domain for DatetimeDomain {
+        │   │   ├── enum
+        │   │   │   ├── ffi.rs
+        │   │   │   │   └── fn opendp_domains__enum_domain
+        │   │   │   └── mod.rs
+        │   │   │       ├── impl Domain for EnumDomain {
+        │   │   │       └── impl EnumDomain {
+        │   │   ├── expr
+        │   │   │   ├── ffi.rs
+        │   │   │   │   └── fn opendp_domains__wild_expr_domain
+        │   │   │   └── mod.rs
+        │   │   │       ├── impl Context {
+        │   │   │       ├── impl Domain for ExprDomain {
+        │   │   │       ├── impl Domain for WildExprDomain {
+        │   │   │       ├── impl ExprPlan {
+        │   │   │       ├── impl From<DslPlan> for ExprPlan {
+        │   │   │       ├── impl From<LazyFrame> for ExprPlan {
+        │   │   │       ├── impl LazyFrameDomain {
+        │   │   │       ├── impl WildExprDomain {
+        │   │   │       ├── impl<M: 'static + Metric> OuterMetric for L0InfDistance<M> {
+        │   │   │       ├── impl<M: UnboundedMetric> MetricSpace for (ExprDomain, FrameDistance<M>) {
+        │   │   │       ├── impl<M: UnboundedMetric> MetricSpace for (WildExprDomain, FrameDistance<M>) {
+        │   │   │       ├── impl<M: UnboundedMetric> OuterMetric for FrameDistance<M> {
+        │   │   │       ├── impl<Q: ProductOrd, const P: usize> MetricSpace for (ExprDomain, LpDistance<P, Q>) {
+        │   │   │       ├── impl<Q: ProductOrd> MetricSpace for (ExprDomain, L0InfDistance<LInfDistance<Q>>) {
+        │   │   │       ├── impl<Q: ProductOrd> MetricSpace for (ExprDomain, LInfDistance<Q>) {
+        │   │   │       ├── impl<const P: usize, M: 'static + Metric> OuterMetric for L0PInfDistance<P, M> {
+        │   │   │       ├── impl<const P: usize, M: UnboundedMetric> MetricSpace for (ExprDomain, L0PInfDistance<P, M>) {
+        │   │   │       ├── impl<const P: usize, M: UnboundedMetric> MetricSpace for (WildExprDomain, L0PInfDistance<P, M>) {
+        │   │   │       └── impl<const P: usize, Q: 'static> OuterMetric for LpDistance<P, Q> {
+        │   │   ├── frame
+        │   │   │   ├── ffi.rs
+        │   │   │   │   ├── fn _lazyframe_from_domain
+        │   │   │   │   ├── fn opendp_domains___lazyframe_domain_get_columns
+        │   │   │   │   ├── fn opendp_domains___lazyframe_domain_get_margin
+        │   │   │   │   ├── fn opendp_domains___lazyframe_domain_get_series_domain
+        │   │   │   │   ├── fn opendp_domains___lazyframe_from_domain
+        │   │   │   │   ├── fn opendp_domains__lazyframe_domain
+        │   │   │   │   ├── fn opendp_domains__with_margin
+        │   │   │   │   ├── fn unpack_series_domains
+        │   │   │   │   └── impl<F: 'static + Frame> MetricSpace for (FrameDomain<F>, AnyMetric) {
+        │   │   │   └── mod.rs
+        │   │   │       ├── fn find_min_covering
+        │   │   │       ├── impl Frame for DataFrame {
+        │   │   │       ├── impl Frame for DslPlan {
+        │   │   │       ├── impl Frame for LazyFrame {
+        │   │   │       ├── impl Margin {
+        │   │   │       ├── impl PartialOrd for Invariant {
+        │   │   │       ├── impl<F: Frame, M: MicrodataMetric> MetricSpace for (FrameDomain<F>, M) {
+        │   │   │       ├── impl<F: Frame, M: UnboundedMetric> MetricSpace for (FrameDomain<F>, FrameDistance<M>) {
+        │   │   │       ├── impl<F: Frame, const P: usize, T: ProductOrd + NumericDataType> MetricSpace
+        │   │   │       ├── impl<F: Frame> Domain for FrameDomain<F> {
+        │   │   │       ├── impl<F: Frame> FrameDomain<F> {
+        │   │   │       ├── impl<F: Frame> PartialEq for FrameDomain<F> {
+        │   │   │       └── impl<Q> MetricSpace for (LazyFrameDomain, LInfDistance<Q>) {
+        │   │   └── series
+        │   │       ├── ffi.rs
+        │   │       │   ├── fn _series_domain_get_element_domain
+        │   │       │   ├── fn opendp_domains___series_domain_get_element_domain
+        │   │       │   ├── fn opendp_domains___series_domain_get_name
+        │   │       │   ├── fn opendp_domains___series_domain_get_nullable
+        │   │       │   ├── fn opendp_domains__series_domain
+        │   │       │   ├── fn series_domain
+        │   │       │   └── impl MetricSpace for (SeriesDomain, AnyMetric) {
+        │   │       └── mod.rs
+        │   │           ├── impl Domain for SeriesDomain {
+        │   │           ├── impl PartialEq for SeriesDomain {
+        │   │           ├── impl PartialEq for dyn DynSeriesElementDomain + '_ {
+        │   │           ├── impl PrimitiveDataType for NaiveDate {
+        │   │           ├── impl PrimitiveDataType for NaiveTime {
+        │   │           ├── impl PrimitiveDataType for String {
+        │   │           ├── impl PrimitiveDataType for bool {
+        │   │           ├── impl SeriesDomain {
+        │   │           ├── impl SeriesElementDomain for ArrayDomain {
+        │   │           ├── impl SeriesElementDomain for CategoricalDomain {
+        │   │           ├── impl SeriesElementDomain for DatetimeDomain {
+        │   │           ├── impl SeriesElementDomain for EnumDomain {
+        │   │           ├── impl<D: 'static + SeriesElementDomain> DynSeriesElementDomain for D {
+        │   │           ├── impl<D: SeriesElementDomain<InnerDomain = D>> SeriesElementDomain for OptionDomain<D> {
+        │   │           ├── impl<D: UnboundedMetric> MetricSpace for (SeriesDomain, D) {
+        │   │           └── impl<T: CheckAtom + PrimitiveDataType> SeriesElementDomain for AtomDomain<T> {
+        │   └── poly.rs
+        │       ├── impl<DI, TO, MI, MO> Measurement<DI, TO, MI, MO>
+        │       ├── impl<TI: 'static, TO: 'static> Function<TI, TO> {
+        │       └── impl<TI> Function<TI, Box<dyn Any>> {
+        ├── error
+        │   └── mod.rs
+        │       ├── impl From<ConversionError> for Error {
+        │       ├── impl From<Error> for PolarsError {
+        │       ├── impl From<ErrorVariant> for Error {
+        │       ├── impl From<PolarsError> for Error {
+        │       ├── impl PartialEq for Error {
+        │       ├── impl fmt::Display for Error {
+        │       ├── impl<T, E: Debug> ExplainUnwrap for Result<T, E> {
+        │       ├── impl<T> ExplainUnwrap for Option<T> {
+        │       ├── impl<T> From<Error> for Result<T, Error> {
+        │       └── impl<T> WithVariant for Fallible<T> {
+        ├── ffi
+        │   ├── any.rs
+        │   │   ├── fn wrap_func
+        │   │   ├── impl AnyDomain {
+        │   │   ├── impl AnyMeasure {
+        │   │   ├── impl AnyMetric {
+        │   │   ├── impl AnyObject {
+        │   │   ├── impl Domain for AnyDomain {
+        │   │   ├── impl Downcast for AnyDomain {
+        │   │   ├── impl Downcast for AnyMeasure {
+        │   │   ├── impl Downcast for AnyMetric {
+        │   │   ├── impl Downcast for AnyObject {
+        │   │   ├── impl Downcast for ElementBox {
+        │   │   ├── impl ElementBox {
+        │   │   ├── impl Measure for AnyMeasure {
+        │   │   ├── impl Metric for AnyMetric {
+        │   │   ├── impl PartialEq for ElementBox {
+        │   │   ├── impl<DI: 'static + Domain, DO: 'static + Domain, MI: 'static + Metric, MO: 'static + Metric>
+        │   │   ├── impl<DI: 'static + Domain, TO: 'static, MI: 'static + Metric, MO: 'static + Measure>
+        │   │   ├── impl<DI: Domain, Q: 'static, A: 'static, MI: Metric, MO: Measure>
+        │   │   ├── impl<M: Metric> MetricSpace for (AnyDomain, M) {
+        │   │   ├── impl<MI: Metric, MO: Measure> IntoAnyPrivacyMapExt for PrivacyMap<MI, MO>
+        │   │   ├── impl<MI: Metric, MO: Metric> IntoAnyStabilityMapExt for StabilityMap<MI, MO>
+        │   │   ├── impl<TI: 'static, TO: 'static> Function<TI, TO> {
+        │   │   ├── impl<TO: 'static> Function<AnyObject, TO> {
+        │   │   └── impl<TO: 'static> Measurement<AnyDomain, TO, AnyMetric, AnyMeasure> {
+        │   ├── dispatch.rs
+        │   │   ├── impl<T> FailedDispatch for Fallible<T> {
+        │   │   ├── impl<T> FailedDispatch for FfiResult<*mut T> {
+        │   │   └── impl<T> FailedDispatch for Option<T> {
+        │   └── util.rs
+        │       ├── fn as_mut_ref
+        │       ├── fn as_ref
+        │       ├── fn from_bool
+        │       ├── fn into_c_char_p
+        │       ├── fn into_owned
+        │       ├── fn into_raw
+        │       ├── fn into_string
+        │       ├── fn to_bool
+        │       ├── fn to_option_str
+        │       ├── fn to_str
+        │       ├── impl Drop for ExtrinsicObject {
+        │       ├── impl ToString for Type {
+        │       ├── impl TryFrom<&str> for Type {
+        │       ├── impl TryFrom<*const c_char> for Type {
+        │       ├── impl Type {
+        │       └── impl<S: ToString> ToCharP for S {
+        ├── interactive
+        │   └── mod.rs
+        │       ├── fn wrap
+        │       ├── impl FromPolyQueryable for PolyQueryable {
+        │       ├── impl IntoPolyQueryable for PolyQueryable {
+        │       ├── impl WrapFn {
+        │       ├── impl<A> Answer<A> {
+        │       ├── impl<DI: Domain, TO, MI: Metric, MO: Measure> Measurement<DI, TO, MI, MO>
+        │       ├── impl<Q: 'static, A: 'static> FromPolyQueryable for Queryable<Q, A> {
+        │       ├── impl<Q: 'static, A: 'static> IntoPolyQueryable for Queryable<Q, A> {
+        │       ├── impl<Q: ?Sized, A> Queryable<Q, A>
+        │       ├── impl<Q: ?Sized, A> Queryable<Q, A> {
+        │       └── impl<Q: ?Sized> Queryable<Q, Box<dyn Any>> {
+        ├── internal
+        │   └── mod.rs
+        │       ├── fn _make_measurement
+        │       ├── fn _new_pure_function
+        │       ├── fn opendp_internal___extrinsic_distance
+        │       ├── fn opendp_internal___extrinsic_divergence
+        │       ├── fn opendp_internal___extrinsic_domain
+        │       ├── fn opendp_internal___make_measurement
+        │       ├── fn opendp_internal___make_transformation
+        │       └── fn opendp_internal___new_pure_function
+        ├── measurements
+        │   ├── alp
+        │   │   ├── ffi.rs
+        │   │   │   └── fn opendp_measurements__make_alp_queryable
+        │   │   └── mod.rs
+        │   │       ├── fn are_parameters_invalid
+        │   │       ├── fn compute_estimate
+        │   │       ├── fn compute_prob
+        │   │       ├── fn compute_projection
+        │   │       ├── fn estimate_unary
+        │   │       ├── fn exponent_next_power_of_two
+        │   │       ├── fn hash
+        │   │       ├── fn make_alp_queryable
+        │   │       ├── fn make_alp_state
+        │   │       ├── fn make_alp_state_with_hashers
+        │   │       ├── fn post_alp_state_to_queryable
+        │   │       ├── fn pre_hash
+        │   │       ├── fn sample_hash_function
+        │   │       └── fn scale_and_round
+        │   ├── gumbel_max
+        │   │   ├── ffi.rs
+        │   │   │   └── fn opendp_measurements__make_report_noisy_max_gumbel
+        │   │   └── mod.rs
+        │   │       ├── fn report_noisy_max_gumbel_map
+        │   │       ├── fn select_score
+        │   │       ├── impl Display for Optimize {
+        │   │       ├── impl TryFrom<&str> for Optimize {
+        │   │       └── ✅ fn make_report_noisy_max_gumbel
+        │   ├── make_private_expr
+        │   │   ├── expr_index_candidates
+        │   │   │   └── mod.rs
+        │   │   │       ├── fn index_candidates
+        │   │   │       ├── fn index_candidates_plugin
+        │   │   │       ├── fn index_candidates_plugin_type_udf
+        │   │   │       ├── fn index_candidates_udf
+        │   │   │       ├── fn make_expr_index_candidates
+        │   │   │       ├── fn match_index_candidates
+        │   │   │       ├── impl ColumnsUdf for IndexCandidatesPlugin {
+        │   │   │       ├── impl ColumnsUdf for IndexCandidatesShim {
+        │   │   │       ├── impl OpenDPPlugin for IndexCandidatesPlugin {
+        │   │   │       └── impl OpenDPPlugin for IndexCandidatesShim {
+        │   │   ├── expr_len
+        │   │   │   └── mod.rs
+        │   │   │       └── fn make_expr_private_len
+        │   │   ├── expr_literal
+        │   │   │   └── mod.rs
+        │   │   │       └── fn make_expr_private_lit
+        │   │   ├── expr_noise
+        │   │   │   └── mod.rs
+        │   │   │       ├── fn make_expr_noise
+        │   │   │       ├── fn match_noise_shim
+        │   │   │       ├── fn noise
+        │   │   │       ├── fn noise_impl
+        │   │   │       ├── fn noise_plugin
+        │   │   │       ├── fn noise_plugin_type_udf
+        │   │   │       ├── fn noise_udf
+        │   │   │       ├── impl ColumnsUdf for NoisePlugin {
+        │   │   │       ├── impl ColumnsUdf for NoiseShim {
+        │   │   │       ├── impl NoiseExprMeasure for MaxDivergence {
+        │   │   │       ├── impl NoiseExprMeasure for ZeroConcentratedDivergence {
+        │   │   │       ├── impl OpenDPPlugin for NoisePlugin {
+        │   │   │       └── impl OpenDPPlugin for NoiseShim {
+        │   │   ├── expr_postprocess
+        │   │   │   └── mod.rs
+        │   │   │       ├── fn make_expr_postprocess
+        │   │   │       └── fn match_postprocess
+        │   │   ├── expr_report_noisy_max
+        │   │   │   └── mod.rs
+        │   │   │       ├── fn make_expr_report_noisy_max
+        │   │   │       ├── fn match_report_noisy_max
+        │   │   │       ├── fn report_noisy_max
+        │   │   │       ├── fn report_noisy_max_gumbel_udf
+        │   │   │       ├── fn report_noisy_max_plugin
+        │   │   │       ├── fn report_noisy_max_plugin_type_udf
+        │   │   │       ├── impl ColumnsUdf for ReportNoisyMaxPlugin {
+        │   │   │       ├── impl ColumnsUdf for ReportNoisyMaxShim {
+        │   │   │       ├── impl OpenDPPlugin for ReportNoisyMaxPlugin {
+        │   │   │       └── impl OpenDPPlugin for ReportNoisyMaxShim {
+        │   │   ├── ffi.rs
+        │   │   │   └── fn opendp_measurements__make_private_expr
+        │   │   └── mod.rs
+        │   │       ├── fn approximate_c_stability
+        │   │       ├── fn make_private_expr
+        │   │       ├── fn make_private_measure_agnostic
+        │   │       ├── impl<M: 'static + UnboundedMetric> PrivateExpr<L01InfDistance<M>, MaxDivergence> for Expr {
+        │   │       ├── impl<M: 'static + UnboundedMetric> PrivateExpr<L01InfDistance<M>, ZeroConcentratedDivergence>
+        │   │       └── impl<MI: 'static + UnboundedMetric, MO: 'static + Measure>
+        │   ├── make_private_lazyframe
+        │   │   ├── ffi.rs
+        │   │   │   └── fn opendp_measurements__make_private_lazyframe
+        │   │   ├── group_by
+        │   │   │   ├── matching.rs
+        │   │   │   │   ├── fn is_len_expr
+        │   │   │   │   ├── fn is_threshold_predicate
+        │   │   │   │   ├── fn match_group_by
+        │   │   │   │   └── fn match_grouping_columns
+        │   │   │   └── mod.rs
+        │   │   │       ├── fn integrate_discrete_noise_tail
+        │   │   │       ├── fn match_filter
+        │   │   │       ├── impl<MO: BasicCompositionMeasure> ApproximateMeasure for Approximate<MO>
+        │   │   │       └── ✅ fn make_private_group_by
+        │   │   ├── mod.rs
+        │   │   │   ├── fn make_private_aggregation
+        │   │   │   ├── fn make_private_lazyframe
+        │   │   │   ├── impl<MI, MO> PrivateDslPlan<FrameDistance<MI>, Approximate<MO>> for DslPlan
+        │   │   │   ├── impl<MI, MO> PrivateDslPlan<MI, MO> for DslPlan
+        │   │   │   ├── impl<MI> PrivateDslPlan<FrameDistance<MI>, MaxDivergence> for DslPlan
+        │   │   │   ├── impl<MI> PrivateDslPlan<FrameDistance<MI>, ZeroConcentratedDivergence> for DslPlan
+        │   │   │   └── impl<MO: 'static + Measure> PrivateDslPlan<ChangeOneIdDistance, MO> for DslPlan
+        │   │   ├── postprocess
+        │   │   │   └── mod.rs
+        │   │   │       └── fn match_postprocess
+        │   │   └── select
+        │   │       └── mod.rs
+        │   │           └── fn make_private_select
+        │   ├── make_user_measurement
+        │   │   └── mod.rs
+        │   │       ├── fn make_user_measurement
+        │   │       └── fn opendp_measurements__make_user_measurement
+        │   ├── noise
+        │   │   ├── distribution
+        │   │   │   ├── gaussian
+        │   │   │   │   ├── ffi.rs
+        │   │   │   │   │   ├── fn opendp_measurements__make_gaussian
+        │   │   │   │   │   ├── impl<T: Number, Q: Number> GaussianMetric<T> for AbsoluteDistance<Q> {
+        │   │   │   │   │   └── impl<T: Number, Q: Number> GaussianMetric<T> for L2Distance<Q> {
+        │   │   │   │   └── mod.rs
+        │   │   │   │       ├── ✅ fn make_gaussian
+        │   │   │   │       ├── ✅ impl NoisePrivacyMap<L2Distance<RBig>, ZeroConcentratedDivergence> for ZExpFamily<2> {
+        │   │   │   │       └── ✅ impl<DI: NoiseDomain, MI: ModularMetric, MO: 'static + Measure> MakeNoise<DI, MI, MO>
+        │   │   │   ├── geometric
+        │   │   │   │   ├── ffi.rs
+        │   │   │   │   │   ├── fn opendp_measurements__make_geometric
+        │   │   │   │   │   ├── impl<T: Number, Q: Number> GeometricMetric<T> for AbsoluteDistance<Q> {
+        │   │   │   │   │   └── impl<T: Number, Q: Number> GeometricMetric<T> for L1Distance<Q> {
+        │   │   │   │   └── mod.rs
+        │   │   │   │       ├── ✅ fn make_geometric
+        │   │   │   │       ├── ✅ impl<T, MO> MakeNoise<AtomDomain<T>, AbsoluteDistance<T>, MO> for ConstantTimeGeometric<T>
+        │   │   │   │       └── ✅ impl<T, MO> MakeNoise<VectorDomain<AtomDomain<T>>, L1Distance<T>, MO> for ConstantTimeGeometric<T>
+        │   │   │   ├── laplace
+        │   │   │   │   ├── ffi.rs
+        │   │   │   │   │   ├── fn opendp_measurements__make_laplace
+        │   │   │   │   │   ├── impl<T: Number, Q: Number> LaplaceMetric<T> for AbsoluteDistance<Q> {
+        │   │   │   │   │   └── impl<T: Number, Q: Number> LaplaceMetric<T> for L1Distance<Q> {
+        │   │   │   │   └── mod.rs
+        │   │   │   │       ├── ✅ fn make_laplace
+        │   │   │   │       ├── ✅ impl NoisePrivacyMap<L1Distance<RBig>, MaxDivergence> for ZExpFamily<1> {
+        │   │   │   │       └── ✅ impl<DI: NoiseDomain, MI: ModularMetric, MO: 'static + Measure> MakeNoise<DI, MI, MO>
+        │   │   │   └── mod.rs
+        │   │   │       ├── impl<T: 'static + CheckAtom> NoiseDomain for AtomDomain<T> {
+        │   │   │       └── impl<T: 'static + CheckAtom> NoiseDomain for VectorDomain<AtomDomain<T>> {
+        │   │   ├── mod.rs
+        │   │   │   ├── impl SampleDiscreteNoise for ZExpFamily<1> {
+        │   │   │   ├── impl SampleDiscreteNoise for ZExpFamily<2> {
+        │   │   │   ├── ✅ impl<MI: Metric, MO: 'static + Measure, RV: Sample>
+        │   │   │   └── ✅ impl<const P: usize> Sample for ZExpFamily<P>
+        │   │   └── nature
+        │   │       ├── bigint
+        │   │       │   └── mod.rs
+        │   │       │       └── ✅ impl<const P: usize, MO> MakeNoise<AtomDomain<IBig>, AbsoluteDistance<RBig>, MO> for ZExpFamily<P>
+        │   │       ├── float
+        │   │       │   ├── mod.rs
+        │   │       │   │   ├── ✅ fn make_float_to_bigint
+        │   │       │   │   ├── ✅ fn then_deintegerize_vec
+        │   │       │   │   └── ✅ impl<T: Float, const P: usize, QI: Number, MO: 'static + Measure>
+        │   │       │   └── utilities
+        │   │       │       └── mod.rs
+        │   │       │           ├── fn integerize_scale
+        │   │       │           ├── ✅ fn find_nearest_multiple_of_2k
+        │   │       │           ├── ✅ fn floor_div
+        │   │       │           ├── ✅ fn get_min_k
+        │   │       │           ├── ✅ fn get_rounding_distance
+        │   │       │           └── ✅ fn x_mul_2k
+        │   │       ├── integer
+        │   │       │   └── mod.rs
+        │   │       │       ├── ✅ fn make_int_to_bigint
+        │   │       │       ├── ✅ fn then_saturating_cast
+        │   │       │       ├── ✅ impl<T, const P: usize, QI, MO> MakeNoise<AtomDomain<T>, AbsoluteDistance<QI>, MO>
+        │   │       │       └── ✅ impl<T, const P: usize, QI: Number, MO>
+        │   │       └── mod.rs
+        │   │           └── impl Nature for IBig {
+        │   ├── noise_threshold
+        │   │   ├── distribution
+        │   │   │   ├── gaussian
+        │   │   │   │   ├── ffi.rs
+        │   │   │   │   │   └── fn opendp_measurements__make_gaussian_threshold
+        │   │   │   │   └── mod.rs
+        │   │   │   │       ├── ✅ fn make_gaussian_threshold
+        │   │   │   │       └── ✅ impl<DI: NoiseDomain, MI: Metric, MO: 'static + Measure> MakeNoiseThreshold<DI, MI, MO>
+        │   │   │   └── laplace
+        │   │   │       ├── ffi.rs
+        │   │   │       │   └── fn opendp_measurements__make_laplace_threshold
+        │   │   │       └── mod.rs
+        │   │   │           ├── ✅ fn make_laplace_threshold
+        │   │   │           ├── ✅ impl NoiseThresholdPrivacyMap<L01InfDistance<AbsoluteDistance<RBig>>, Approximate<MaxDivergence>>
+        │   │   │           └── ✅ impl<DI: NoiseDomain, MI: Metric, MO: 'static + Measure> MakeNoiseThreshold<DI, MI, MO>
+        │   │   ├── mod.rs
+        │   │   │   └── ✅ impl<TK, const P: usize, MO: 'static + Measure>
+        │   │   └── nature
+        │   │       ├── float
+        │   │       │   └── mod.rs
+        │   │       │       ├── ✅ fn make_float_to_bigint_threshold
+        │   │       │       ├── ✅ fn then_deintegerize_hashmap
+        │   │       │       └── ✅ impl<TK, TV, const P: usize, QI: Number, MO: 'static + Measure>
+        │   │       ├── integer
+        │   │       │   └── mod.rs
+        │   │       │       ├── impl<TK, TV, const P: usize, QI: Number, MO: 'static + Measure>
+        │   │       │       ├── ✅ fn make_int_to_bigint_threshold
+        │   │       │       └── ✅ fn then_saturating_cast_hashmap
+        │   │       └── mod.rs
+        │   │           └── impl<DK: Domain, TV: 'static + CheckAtom> NoiseDomain for MapDomain<DK, AtomDomain<TV>>
+        │   ├── private_quantile
+        │   │   ├── ffi.rs
+        │   │   │   └── fn opendp_measurements__make_private_quantile
+        │   │   └── mod.rs
+        │   │       └── fn make_private_quantile
+        │   ├── randomized_response
+        │   │   ├── ffi.rs
+        │   │   │   ├── fn opendp_measurements__make_randomized_response
+        │   │   │   └── fn opendp_measurements__make_randomized_response_bool
+        │   │   └── mod.rs
+        │   │       ├── ✅ fn make_randomized_response
+        │   │       └── ✅ fn make_randomized_response_bool
+        │   └── randomized_response_bitvec
+        │       ├── ffi.rs
+        │       │   ├── fn opendp_measurements__debias_randomized_response_bitvec
+        │       │   └── fn opendp_measurements__make_randomized_response_bitvec
+        │       └── mod.rs
+        │           ├── fn debias_randomized_response_bitvec
+        │           └── ✅ fn make_randomized_response_bitvec
+        ├── measures
+        │   ├── ffi.rs
+        │   │   ├── fn approximate
+        │   │   ├── fn new_privacy_profile
+        │   │   ├── fn opendp_measures___measure_equal
+        │   │   ├── fn opendp_measures___measure_free
+        │   │   ├── fn opendp_measures__approximate
+        │   │   ├── fn opendp_measures__fixed_smoothed_max_divergence
+        │   │   ├── fn opendp_measures__max_divergence
+        │   │   ├── fn opendp_measures__measure_debug
+        │   │   ├── fn opendp_measures__measure_distance_type
+        │   │   ├── fn opendp_measures__measure_type
+        │   │   ├── fn opendp_measures__new_privacy_profile
+        │   │   ├── fn opendp_measures__renyi_divergence
+        │   │   ├── fn opendp_measures__smoothed_max_divergence
+        │   │   ├── fn opendp_measures__user_divergence
+        │   │   ├── fn opendp_measures__zero_concentrated_divergence
+        │   │   ├── impl Measure for ExtrinsicDivergence {
+        │   │   ├── impl PartialEq for ExtrinsicDivergence {
+        │   │   ├── impl std::fmt::Debug for ExtrinsicDivergence {
+        │   │   ├── impl<Q: 'static> TypedMeasure<Q> {
+        │   │   ├── impl<Q> Measure for TypedMeasure<Q> {
+        │   │   └── impl<Q> PartialEq for TypedMeasure<Q> {
+        │   └── mod.rs
+        │       ├── impl Measure for MaxDivergence {
+        │       ├── impl Measure for RenyiDivergence {
+        │       ├── impl Measure for SmoothedMaxDivergence {
+        │       ├── impl Measure for ZeroConcentratedDivergence {
+        │       ├── impl PrivacyProfile {
+        │       └── impl<M: Measure> Measure for Approximate<M> {
+        ├── metrics
+        │   ├── ffi.rs
+        │   │   ├── fn absolute_distance
+        │   │   ├── fn l01inf_distance
+        │   │   ├── fn l02inf_distance
+        │   │   ├── fn l1_distance
+        │   │   ├── fn l2_distance
+        │   │   ├── fn linf_distance
+        │   │   ├── fn opendp_metrics___metric_equal
+        │   │   ├── fn opendp_metrics___metric_free
+        │   │   ├── fn opendp_metrics__absolute_distance
+        │   │   ├── fn opendp_metrics__change_one_distance
+        │   │   ├── fn opendp_metrics__discrete_distance
+        │   │   ├── fn opendp_metrics__hamming_distance
+        │   │   ├── fn opendp_metrics__insert_delete_distance
+        │   │   ├── fn opendp_metrics__l01inf_distance
+        │   │   ├── fn opendp_metrics__l02inf_distance
+        │   │   ├── fn opendp_metrics__l1_distance
+        │   │   ├── fn opendp_metrics__l2_distance
+        │   │   ├── fn opendp_metrics__linf_distance
+        │   │   ├── fn opendp_metrics__metric_debug
+        │   │   ├── fn opendp_metrics__metric_distance_type
+        │   │   ├── fn opendp_metrics__metric_type
+        │   │   ├── fn opendp_metrics__symmetric_distance
+        │   │   ├── fn opendp_metrics__user_distance
+        │   │   ├── impl Metric for ExtrinsicDistance {
+        │   │   ├── impl PartialEq for ExtrinsicDistance {
+        │   │   ├── impl std::fmt::Debug for ExtrinsicDistance {
+        │   │   ├── impl<Q: 'static> TypedMetric<Q> {
+        │   │   ├── impl<Q> Metric for TypedMetric<Q> {
+        │   │   └── impl<Q> PartialEq for TypedMetric<Q> {
+        │   ├── mod.rs
+        │   │   ├── impl EventLevelMetric for ChangeOneDistance {}
+        │   │   ├── impl EventLevelMetric for HammingDistance {}
+        │   │   ├── impl EventLevelMetric for InsertDeleteDistance {}
+        │   │   ├── impl EventLevelMetric for SymmetricDistance {}
+        │   │   ├── impl Metric for ChangeOneDistance {
+        │   │   ├── impl Metric for DiscreteDistance {
+        │   │   ├── impl Metric for HammingDistance {
+        │   │   ├── impl Metric for InsertDeleteDistance {
+        │   │   ├── impl Metric for SymmetricDistance {
+        │   │   ├── impl MetricSpace for (AtomDomain<String>, SymmetricDistance) {
+        │   │   ├── impl MetricSpace for (BitVectorDomain, DiscreteDistance) {
+        │   │   ├── impl MicrodataMetric for ChangeOneDistance {
+        │   │   ├── impl MicrodataMetric for HammingDistance {
+        │   │   ├── impl MicrodataMetric for InsertDeleteDistance {
+        │   │   ├── impl MicrodataMetric for SymmetricDistance {
+        │   │   ├── impl<D: Domain> MetricSpace for (VectorDomain<D>, ChangeOneDistance) {
+        │   │   ├── impl<D: Domain> MetricSpace for (VectorDomain<D>, HammingDistance) {
+        │   │   ├── impl<D: Domain> MetricSpace for (VectorDomain<D>, InsertDeleteDistance) {
+        │   │   ├── impl<D: Domain> MetricSpace for (VectorDomain<D>, SymmetricDistance) {
+        │   │   ├── impl<K: CheckAtom, V: CheckAtom, const P: usize, Q> MetricSpace
+        │   │   ├── impl<K: Hashable> MetricSpace for (DataFrameDomain<K>, InsertDeleteDistance) {
+        │   │   ├── impl<K: Hashable> MetricSpace for (DataFrameDomain<K>, SymmetricDistance) {
+        │   │   ├── impl<M: Metric> Metric for L0InfDistance<M> {
+        │   │   ├── impl<Q: InfAdd> LInfDistance<Q> {
+        │   │   ├── impl<Q> LInfDistance<Q> {
+        │   │   ├── impl<Q> Metric for AbsoluteDistance<Q> {
+        │   │   ├── impl<Q> Metric for LInfDistance<Q> {
+        │   │   ├── impl<Q> ModularMetric for AbsoluteDistance<Q> {
+        │   │   ├── impl<Q> PartialEq for AbsoluteDistance<Q> {
+        │   │   ├── impl<Q> PartialEq for LInfDistance<Q> {
+        │   │   ├── impl<T: CheckAtom, Q> MetricSpace for (AtomDomain<T>, AbsoluteDistance<Q>) {
+        │   │   ├── impl<T: CheckAtom, const P: usize, Q> MetricSpace
+        │   │   ├── impl<T: CheckAtom, const P: usize> MetricSpace
+        │   │   ├── impl<T: CheckAtom> MetricSpace for (AtomDomain<T>, DiscreteDistance) {
+        │   │   ├── impl<T: CheckAtom> MetricSpace for (VectorDomain<AtomDomain<T>>, LInfDistance<T>) {
+        │   │   ├── impl<const P: usize, M: Metric> Metric for L0PInfDistance<P, M> {
+        │   │   ├── impl<const P: usize, Q> LpDistance<P, Q> {
+        │   │   ├── impl<const P: usize, Q> Metric for LpDistance<P, Q> {
+        │   │   ├── impl<const P: usize, Q> ModularMetric for LpDistance<P, Q> {
+        │   │   └── impl<const P: usize, Q> PartialEq for LpDistance<P, Q> {
+        │   └── polars
+        │       ├── ffi.rs
+        │       │   ├── fn opendp_metrics___change_one_id_distance_get_identifier
+        │       │   ├── fn opendp_metrics___frame_distance_get_inner_metric
+        │       │   ├── fn opendp_metrics___symmetric_id_distance_get_identifier
+        │       │   ├── fn opendp_metrics__change_one_id_distance
+        │       │   ├── fn opendp_metrics__frame_distance
+        │       │   └── fn opendp_metrics__symmetric_id_distance
+        │       └── mod.rs
+        │           ├── impl Bound {
+        │           ├── impl Bounds {
+        │           ├── impl From<u32> for Bounds {
+        │           ├── impl Metric for ChangeOneIdDistance {
+        │           ├── impl Metric for SymmetricIdDistance {
+        │           ├── impl MicrodataMetric for ChangeOneIdDistance {
+        │           ├── impl MicrodataMetric for SymmetricIdDistance {
+        │           ├── impl PartialOrd for Bounds {
+        │           ├── impl ProductOrd for Bounds {
+        │           └── impl<M: UnboundedMetric> Metric for FrameDistance<M> {
+        ├── polars
+        │   └── mod.rs
+        │       ├── fn apply_anonymous_function
+        │       ├── fn apply_plugin
+        │       ├── fn get_disabled_features_message
+        │       ├── fn literal_value_of
+        │       ├── fn match_plugin
+        │       ├── fn match_trusted_plugin
+        │       ├── impl DPExpr {
+        │       ├── impl ExtractValue for Series {
+        │       ├── impl ExtractValue for String {
+        │       ├── impl From<LazyFrame> for OnceFrame {
+        │       ├── impl Function<DslPlan, ExprPlan> {
+        │       ├── impl Function<ExprPlan, ExprPlan> {
+        │       ├── impl OnceFrame {
+        │       ├── impl PrivacyNamespace for Expr {
+        │       └── impl<TI: 'static> Function<TI, ExprPlan> {
+        ├── traits
+        │   ├── arithmetic
+        │   │   └── mod.rs
+        │   │       ├── fn catch_unwind_silent
+        │   │       ├── impl InfExp for f32 {
+        │   │       ├── impl InfExp for f64 {
+        │   │       ├── impl Log2 for FBig<Down> {
+        │   │       └── impl Log2 for FBig<Up> {
+        │   ├── cast
+        │   │   └── mod.rs
+        │   │       ├── impl ExactIntBounds for f32 {
+        │   │       ├── impl ExactIntBounds for f64 {
+        │   │       ├── impl InfCast<f64> for f32 {
+        │   │       ├── impl NextFloat for f32 {
+        │   │       ├── impl NextFloat for f64 {
+        │   │       ├── impl RoundCast<RBig> for f32 {
+        │   │       ├── impl RoundCast<RBig> for f64 {
+        │   │       ├── impl RoundCast<String> for String {
+        │   │       ├── impl RoundCast<String> for bool {
+        │   │       ├── impl RoundCast<bool> for String {
+        │   │       ├── impl RoundCast<bool> for bool {
+        │   │       ├── impl ToFloatRounded for FBig<Down> {
+        │   │       ├── impl ToFloatRounded for FBig<Up> {
+        │   │       ├── impl<R: Round> FromFBig<R> for f32
+        │   │       ├── impl<R: Round> FromFBig<R> for f64
+        │   │       ├── impl<R: Round> InfCast<FBig<R>> for f32 {
+        │   │       ├── impl<R: Round> InfCast<FBig<R>> for f64 {
+        │   │       ├── impl<R: Round> InfCast<f32> for FBig<R> {
+        │   │       ├── impl<R: Round> InfCast<f64> for FBig<R> {
+        │   │       ├── impl<R: Round> RoundCast<FBig<R>> for f32 {
+        │   │       ├── impl<R: Round> RoundCast<FBig<R>> for f64 {
+        │   │       ├── impl<R: Round> RoundCast<f32> for FBig<R> {
+        │   │       └── impl<R: Round> RoundCast<f64> for FBig<R> {
+        │   ├── mod.rs
+        │   │   ├── impl<T> Float for T where
+        │   │   ├── impl<T> Hashable for T where T: Primitive + Eq + Hash {}
+        │   │   ├── impl<T> Integer for T where T: Number + Hashable + Ord {}
+        │   │   ├── impl<T> Number for T where
+        │   │   ├── impl<T> Primitive for T where
+        │   │   └── impl<TI, TO> DistanceConstant<TI> for TO where
+        │   ├── operations
+        │   │   └── mod.rs
+        │   │       ├── fn max_by
+        │   │       ├── fn min_by
+        │   │       ├── fn option_min
+        │   │       ├── impl CheckAtom for (f32, f32) {
+        │   │       ├── impl CheckAtom for (f64, f64) {
+        │   │       ├── impl CheckNull for IBig {
+        │   │       ├── impl CheckNull for RBig {
+        │   │       ├── impl FloatBits for f32 {
+        │   │       ├── impl FloatBits for f64 {
+        │   │       ├── impl<K, V> CollectionSize for HashMap<K, V> {
+        │   │       ├── impl<Q, A> CheckNull for Queryable<Q, A> {
+        │   │       ├── impl<T1: CheckNull, T2: CheckNull> CheckNull for (T1, T2) {
+        │   │       ├── impl<T1: ProductOrd + Debug, T2: ProductOrd + Debug> ProductOrd for (T1, T2) {
+        │   │       ├── impl<T: CheckNull> CheckNull for Option<T> {
+        │   │       └── impl<T> CollectionSize for Vec<T> {
+        │   └── samplers
+        │       ├── bernoulli
+        │       │   └── mod.rs
+        │       │       ├── fn sample_standard_bernoulli
+        │       │       ├── ✅ fn sample_bernoulli_float
+        │       │       └── ✅ fn sample_bernoulli_rational
+        │       ├── cks20
+        │       │   └── mod.rs
+        │       │       ├── ✅ fn sample_bernoulli_exp
+        │       │       ├── ✅ fn sample_bernoulli_exp1
+        │       │       ├── ✅ fn sample_discrete_gaussian
+        │       │       ├── ✅ fn sample_discrete_laplace
+        │       │       ├── ✅ fn sample_geometric_exp_fast
+        │       │       └── ✅ fn sample_geometric_exp_slow
+        │       ├── geometric
+        │       │   └── mod.rs
+        │       │       ├── fn sample_discrete_laplace_linear
+        │       │       └── fn sample_geometric_linear
+        │       ├── mod.rs
+        │       │   ├── fn fill_bytes
+        │       │   ├── impl GeneratorOpenDP {
+        │       │   ├── impl RngCore for GeneratorOpenDP {
+        │       │   └── impl<T> Shuffle for Vec<T> {
+        │       ├── psrn
+        │       │   ├── gumbel
+        │       │   │   └── mod.rs
+        │       │   │       ├── impl GumbelRV {
+        │       │   │       └── impl InverseCDF for GumbelRV {
+        │       │   └── mod.rs
+        │       │       ├── impl ODPRound for Down {
+        │       │       ├── impl ODPRound for Up {
+        │       │       └── impl<D: InverseCDF> PartialSample<D> {
+        │       └── uniform
+        │           └── mod.rs
+        │               ├── fn sample_from_uniform_bytes
+        │               ├── ✅ fn sample_uniform_ubig_below
+        │               └── ✅ fn sample_uniform_uint_below
+        └── transformations
+            ├── b_ary_tree
+            │   ├── consistency_postprocessor
+            │   │   ├── ffi.rs
+            │   │   │   └── fn opendp_transformations__make_consistent_b_ary_tree
+            │   │   └── mod.rs
+            │   │       └── fn make_consistent_b_ary_tree
+            │   ├── ffi.rs
+            │   │   ├── fn opendp_transformations__choose_branching_factor
+            │   │   └── fn opendp_transformations__make_b_ary_tree
+            │   └── mod.rs
+            │       ├── fn choose_branching_factor
+            │       ├── fn log_b_ceil
+            │       ├── fn make_b_ary_tree
+            │       ├── fn num_layers_from_num_leaves
+            │       ├── fn num_layers_from_num_nodes
+            │       ├── fn num_nodes_from_num_layers
+            │       └── impl<const P: usize, T> BAryTreeMetric for LpDistance<P, T> {}
+            ├── cast
+            │   ├── ffi.rs
+            │   │   ├── fn opendp_transformations__make_cast
+            │   │   ├── fn opendp_transformations__make_cast_default
+            │   │   └── fn opendp_transformations__make_cast_inherent
+            │   └── mod.rs
+            │       ├── fn make_cast
+            │       ├── fn make_cast_default
+            │       └── fn make_cast_inherent
+            ├── cast_metric
+            │   ├── ffi.rs
+            │   │   ├── fn opendp_transformations__make_metric_bounded
+            │   │   ├── fn opendp_transformations__make_metric_unbounded
+            │   │   ├── fn opendp_transformations__make_ordered_random
+            │   │   └── fn opendp_transformations__make_unordered
+            │   ├── mod.rs
+            │   │   ├── fn make_metric_bounded
+            │   │   ├── fn make_metric_unbounded
+            │   │   ├── fn make_ordered_random
+            │   │   └── fn make_unordered
+            │   └── traits.rs
+            │       ├── impl BoundedMetric for ChangeOneDistance {
+            │       ├── impl BoundedMetric for ChangeOneIdDistance {
+            │       ├── impl BoundedMetric for HammingDistance {
+            │       ├── impl OrderedMetric for HammingDistance {
+            │       ├── impl OrderedMetric for InsertDeleteDistance {
+            │       ├── impl UnboundedMetric for InsertDeleteDistance {
+            │       ├── impl UnboundedMetric for SymmetricDistance {
+            │       ├── impl UnboundedMetric for SymmetricIdDistance {
+            │       ├── impl UnorderedMetric for ChangeOneDistance {
+            │       └── impl UnorderedMetric for SymmetricDistance {
+            ├── clamp
+            │   ├── ffi.rs
+            │   │   └── fn opendp_transformations__make_clamp
+            │   └── mod.rs
+            │       └── ✅ fn make_clamp
+            ├── count
+            │   ├── ffi.rs
+            │   │   ├── fn opendp_transformations__make_count
+            │   │   ├── fn opendp_transformations__make_count_by
+            │   │   ├── fn opendp_transformations__make_count_by_categories
+            │   │   └── fn opendp_transformations__make_count_distinct
+            │   └── mod.rs
+            │       ├── fn make_count_by
+            │       ├── fn make_count_by_categories
+            │       ├── fn make_count_distinct
+            │       ├── impl<Q: InfCast<u32>> CountByMetric for L01InfDistance<AbsoluteDistance<Q>> {
+            │       ├── impl<Q: InfCast<u32>> CountByMetric for L1Distance<Q> {
+            │       ├── impl<const P: usize, Q: One> CountByCategoriesConstant<Q> for LpDistance<P, Q> {
+            │       └── ✅ fn make_count
+            ├── count_cdf
+            │   ├── ffi.rs
+            │   │   ├── fn opendp_transformations__make_cdf
+            │   │   └── fn opendp_transformations__make_quantiles_from_counts
+            │   └── mod.rs
+            │       ├── fn abs_diff
+            │       ├── fn count_lt
+            │       ├── fn count_lt_recursive
+            │       ├── fn make_cdf
+            │       └── fn make_quantiles_from_counts
+            ├── covariance
+            │   ├── ffi.rs
+            │   │   └── fn opendp_transformations__make_sized_bounded_covariance
+            │   └── mod.rs
+            │       └── fn make_sized_bounded_covariance
+            ├── impute
+            │   ├── ffi.rs
+            │   │   ├── fn opendp_transformations__make_drop_null
+            │   │   ├── fn opendp_transformations__make_impute_constant
+            │   │   └── fn opendp_transformations__make_impute_uniform_float
+            │   └── mod.rs
+            │       ├── fn make_drop_null
+            │       ├── fn make_impute_constant
+            │       ├── fn make_impute_uniform_float
+            │       ├── impl<T: CheckAtom + Clone> DropNullDomain for OptionDomain<AtomDomain<T>> {
+            │       ├── impl<T: CheckAtom + HasNull + Clone> DropNullDomain for AtomDomain<T> {
+            │       ├── impl<T: CheckAtom + HasNull> ImputeConstantDomain for AtomDomain<T> {
+            │       └── impl<T: CheckAtom> ImputeConstantDomain for OptionDomain<AtomDomain<T>> {
+            ├── index
+            │   ├── ffi.rs
+            │   │   ├── fn opendp_transformations__make_find
+            │   │   ├── fn opendp_transformations__make_find_bin
+            │   │   └── fn opendp_transformations__make_index
+            │   └── mod.rs
+            │       ├── fn make_find
+            │       ├── fn make_find_bin
+            │       └── fn make_index
+            ├── lipschitz_mul
+            │   ├── ffi.rs
+            │   │   └── fn opendp_transformations__make_lipschitz_float_mul
+            │   └── mod.rs
+            │       └── fn make_lipschitz_float_mul
+            ├── make_stable_expr
+            │   ├── expr_alias
+            │   │   └── mod.rs
+            │   │       └── fn make_expr_alias
+            │   ├── expr_binary
+            │   │   └── mod.rs
+            │   │       └── fn make_expr_binary
+            │   ├── expr_boolean_function
+            │   │   └── mod.rs
+            │   │       └── fn make_expr_boolean_function
+            │   ├── expr_cast
+            │   │   └── mod.rs
+            │   │       └── fn make_expr_cast
+            │   ├── expr_clip
+            │   │   └── mod.rs
+            │   │       ├── fn extract_bound
+            │   │       ├── fn extract_bounds
+            │   │       └── fn make_expr_clip
+            │   ├── expr_col
+            │   │   └── mod.rs
+            │   │       └── fn make_expr_col
+            │   ├── expr_count
+            │   │   └── mod.rs
+            │   │       ├── fn counting_query_stability_map
+            │   │       └── fn make_expr_count
+            │   ├── expr_cut
+            │   │   └── mod.rs
+            │   │       └── fn make_expr_cut
+            │   ├── expr_discrete_quantile_score
+            │   │   ├── mod.rs
+            │   │   │   ├── fn make_expr_discrete_quantile_score
+            │   │   │   ├── fn match_discrete_quantile_score
+            │   │   │   ├── fn series_to_vec
+            │   │   │   └── fn validate
+            │   │   └── plugin_dq_score.rs
+            │   │       ├── fn discrete_quantile_score
+            │   │       ├── fn discrete_quantile_score_plugin
+            │   │       ├── fn discrete_quantile_score_plugin_type_udf
+            │   │       ├── fn discrete_quantile_score_udf
+            │   │       ├── fn series_histogram
+            │   │       ├── impl ColumnsUdf for DiscreteQuantileScorePlugin {
+            │   │       ├── impl ColumnsUdf for DiscreteQuantileScoreShim {
+            │   │       ├── impl OpenDPPlugin for DiscreteQuantileScorePlugin {
+            │   │       └── impl OpenDPPlugin for DiscreteQuantileScoreShim {
+            │   ├── expr_drop_nan_or_null
+            │   │   └── mod.rs
+            │   │       └── fn make_expr_drop_nan_or_null
+            │   ├── expr_fill_nan
+            │   │   └── mod.rs
+            │   │       ├── fn make_expr_fill_nan
+            │   │       └── fn match_fill_nan
+            │   ├── expr_fill_null
+            │   │   └── mod.rs
+            │   │       └── fn make_expr_fill_null
+            │   ├── expr_filter
+            │   │   └── mod.rs
+            │   │       └── fn make_expr_filter
+            │   ├── expr_len
+            │   │   └── mod.rs
+            │   │       └── fn make_expr_len
+            │   ├── expr_lit
+            │   │   └── mod.rs
+            │   │       └── fn make_expr_lit
+            │   ├── expr_replace
+            │   │   └── mod.rs
+            │   │       ├── fn is_cast_fallible
+            │   │       ├── fn literal_is_nullable
+            │   │       ├── fn literal_len
+            │   │       └── fn make_expr_replace
+            │   ├── expr_replace_strict
+            │   │   └── mod.rs
+            │   │       └── fn make_expr_replace_strict
+            │   ├── expr_sum
+            │   │   └── mod.rs
+            │   │       ├── fn make_expr_sum
+            │   │       ├── fn sum_components
+            │   │       └── fn sum_stability_map
+            │   ├── expr_to_physical
+            │   │   └── mod.rs
+            │   │       └── fn make_expr_to_physical
+            │   ├── ffi.rs
+            │   │   └── fn opendp_transformations__make_stable_expr
+            │   ├── mod.rs
+            │   │   ├── fn make_stable_expr
+            │   │   ├── impl<M: OuterMetric> StableExpr<M, M> for Expr
+            │   │   ├── impl<MI, const P: usize> StableExpr<L01InfDistance<MI>, LpDistance<P, f64>> for Expr
+            │   │   └── impl<MI> StableExpr<L01InfDistance<MI>, L0InfDistance<LInfDistance<f64>>> for Expr
+            │   ├── namespace_arr
+            │   │   └── mod.rs
+            │   │       └── fn make_namespace_arr
+            │   ├── namespace_dt
+            │   │   ├── expr_datetime_component
+            │   │   │   └── mod.rs
+            │   │   │       └── fn make_expr_datetime_component
+            │   │   └── mod.rs
+            │   │       └── fn make_namespace_dt
+            │   ├── namespace_str
+            │   │   ├── expr_strptime
+            │   │   │   └── mod.rs
+            │   │   │       └── fn make_expr_strptime
+            │   │   └── mod.rs
+            │   │       └── fn make_namespace_str
+            │   └── test_helper.rs
+            │       └── fn get_test_data
+            ├── make_stable_lazyframe
+            │   ├── ffi.rs
+            │   │   └── fn opendp_transformations__make_stable_lazyframe
+            │   ├── filter
+            │   │   └── mod.rs
+            │   │       └── fn make_stable_filter
+            │   ├── group_by
+            │   │   └── mod.rs
+            │   │       ├── fn assert_infallible
+            │   │       ├── fn assert_infallible_function
+            │   │       └── fn make_stable_group_by
+            │   ├── h_stack
+            │   │   └── mod.rs
+            │   │       └── fn make_h_stack
+            │   ├── mod.rs
+            │   │   ├── fn make_stable_lazyframe
+            │   │   ├── impl StableDslPlan<FrameDistance<SymmetricIdDistance>, FrameDistance<SymmetricDistance>>
+            │   │   ├── impl<M: UnboundedMetric> StableDslPlan<FrameDistance<M>, FrameDistance<M>> for DslPlan {
+            │   │   ├── impl<M: UnboundedMetric> StableDslPlan<M, FrameDistance<M>> for DslPlan {
+            │   │   └── impl<MO: UnboundedMetric> StableDslPlan<ChangeOneIdDistance, FrameDistance<MO>> for DslPlan
+            │   ├── select
+            │   │   └── mod.rs
+            │   │       └── fn make_select
+            │   ├── source
+            │   │   └── mod.rs
+            │   │       └── fn make_stable_source
+            │   └── truncate
+            │       ├── matching.rs
+            │       │   ├── fn ignore_reorder
+            │       │   ├── fn is_enumeration
+            │       │   ├── fn match_truncate_filter
+            │       │   ├── fn match_truncate_filter_predicate
+            │       │   ├── fn match_truncate_group_by
+            │       │   └── fn match_truncations
+            │       └── mod.rs
+            │           └── fn make_stable_truncate
+            ├── make_user_transformation
+            │   └── mod.rs
+            │       └── fn opendp_transformations__make_user_transformation
+            ├── manipulation
+            │   ├── ffi.rs
+            │   │   ├── fn opendp_transformations__make_identity
+            │   │   ├── fn opendp_transformations__make_is_equal
+            │   │   └── fn opendp_transformations__make_is_null
+            │   └── mod.rs
+            │       ├── fn make_identity
+            │       ├── fn make_is_null
+            │       ├── impl<D: Domain> DatasetDomain for VectorDomain<D> {
+            │       ├── impl<DIA: Domain, DOA: Domain> RowByRowDomain<VectorDomain<DOA>> for VectorDomain<DIA> {
+            │       ├── ✅ fn make_is_equal
+            │       ├── ✅ fn make_row_by_row
+            │       └── ✅ fn make_row_by_row_fallible
+            ├── mean
+            │   ├── ffi.rs
+            │   │   └── fn opendp_transformations__make_mean
+            │   └── mod.rs
+            │       └── fn make_mean
+            ├── quantile_score_candidates
+            │   ├── ffi.rs
+            │   │   └── fn opendp_transformations__make_quantile_score_candidates
+            │   └── mod.rs
+            │       ├── fn count_lt_eq
+            │       ├── fn count_lt_eq_recursive
+            │       ├── fn score_candidates_constants
+            │       ├── fn score_candidates_map
+            │       ├── fn validate_candidates
+            │       ├── ✅ fn compute_score
+            │       └── ✅ fn make_quantile_score_candidates
+            ├── resize
+            │   ├── ffi.rs
+            │   │   └── fn opendp_transformations__make_resize
+            │   └── mod.rs
+            │       ├── fn make_resize
+            │       ├── impl IsMetricOrdered for InsertDeleteDistance {
+            │       └── impl IsMetricOrdered for SymmetricDistance {
+            ├── scalar_to_vector
+            │   └── mod.rs
+            │       ├── ✅ fn make_vec
+            │       └── ✅ fn then_index_or_default
+            ├── sum
+            │   ├── ffi.rs
+            │   │   └── fn opendp_transformations__make_sum
+            │   ├── float
+            │   │   ├── checked
+            │   │   │   ├── ffi.rs
+            │   │   │   │   ├── fn opendp_transformations__make_bounded_float_checked_sum
+            │   │   │   │   └── fn opendp_transformations__make_sized_bounded_float_checked_sum
+            │   │   │   └── mod.rs
+            │   │   │       ├── fn make_bounded_float_checked_sum
+            │   │   │       ├── fn make_sized_bounded_float_checked_sum
+            │   │   │       ├── fn round_up_to_nearest_power_of_two
+            │   │   │       ├── impl<T: Float> CanFloatSumOverflow for Pairwise<T> {
+            │   │   │       ├── impl<T: Float> CanFloatSumOverflow for Sequential<T> {
+            │   │   │       ├── impl<T: Float> UncheckedSum for Pairwise<T> {
+            │   │   │       └── impl<T: Float> UncheckedSum for Sequential<T> {
+            │   │   ├── mod.rs
+            │   │   │   ├── impl<T: Float> SumRelaxation for Pairwise<T> {
+            │   │   │   └── impl<T: Float> SumRelaxation for Sequential<T> {
+            │   │   └── ordered
+            │   │       ├── ffi.rs
+            │   │       │   ├── fn opendp_transformations__make_bounded_float_ordered_sum
+            │   │       │   └── fn opendp_transformations__make_sized_bounded_float_ordered_sum
+            │   │       └── mod.rs
+            │   │           ├── fn make_bounded_float_ordered_sum
+            │   │           ├── fn make_sized_bounded_float_ordered_sum
+            │   │           ├── impl<T: Float> SaturatingSum for Pairwise<T> {
+            │   │           └── impl<T: Float> SaturatingSum for Sequential<T> {
+            │   ├── int
+            │   │   ├── checked
+            │   │   │   ├── ffi.rs
+            │   │   │   │   └── fn opendp_transformations__make_sized_bounded_int_checked_sum
+            │   │   │   └── mod.rs
+            │   │   │       └── fn make_sized_bounded_int_checked_sum
+            │   │   ├── mod.rs
+            │   │   │   └── fn can_int_sum_overflow
+            │   │   ├── monotonic
+            │   │   │   ├── ffi.rs
+            │   │   │   │   ├── fn opendp_transformations__make_bounded_int_monotonic_sum
+            │   │   │   │   └── fn opendp_transformations__make_sized_bounded_int_monotonic_sum
+            │   │   │   └── mod.rs
+            │   │   │       ├── fn make_bounded_int_monotonic_sum
+            │   │   │       ├── fn make_sized_bounded_int_monotonic_sum
+            │   │   │       └── fn signs_agree
+            │   │   ├── ordered
+            │   │   │   ├── ffi.rs
+            │   │   │   │   ├── fn opendp_transformations__make_bounded_int_ordered_sum
+            │   │   │   │   └── fn opendp_transformations__make_sized_bounded_int_ordered_sum
+            │   │   │   └── mod.rs
+            │   │   │       ├── fn make_bounded_int_ordered_sum
+            │   │   │       └── fn make_sized_bounded_int_ordered_sum
+            │   │   └── split
+            │   │       ├── ffi.rs
+            │   │       │   ├── fn opendp_transformations__make_bounded_int_split_sum
+            │   │       │   └── fn opendp_transformations__make_sized_bounded_int_split_sum
+            │   │       └── mod.rs
+            │   │           ├── fn make_bounded_int_split_sum
+            │   │           └── fn make_sized_bounded_int_split_sum
+            │   └── mod.rs
+            │       └── fn make_sum
+            ├── sum_of_squared_deviations
+            │   ├── ffi.rs
+            │   │   └── fn opendp_transformations__make_sum_of_squared_deviations
+            │   └── mod.rs
+            │       └── fn make_sum_of_squared_deviations
+            └── variance
+                ├── ffi.rs
+                │   └── fn opendp_transformations__make_variance
+                └── mod.rs
+                    └── fn make_variance
+
